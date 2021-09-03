@@ -30,5 +30,23 @@ class Car(models.Model):
     avg_rating   = models.FloatField(default=1)
     rates        = models.ManyToManyField(to='cars.Rate', related_name='rates')
 
+    def __init__(self, *args, **kwargs):
+        super(Car, self).__init__(*args, **kwargs)
+        self.set_avrage_reating()
+        self.set_rates_number()
+
+    def set_rates_number(self):
+        if self.id is not None:
+            self.rates_number = self.rates.count()
+
+    def set_avrage_reating(self):
+
+        if self.id is not None:
+            rote = 0
+            for item in self.rates.all():
+                rote = rote + item.rating
+            if self.rates.count() > 0:
+                self.avg_rating = rote / self.rates.count()
+
     def __str__(self):
         return self.make
