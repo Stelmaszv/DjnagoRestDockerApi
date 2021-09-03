@@ -1,11 +1,10 @@
 from django.db import models
+import requests
 
-# Create your models here.
 class Rate(models.Model):
     #for class
     mini_rating=0
     max_rating=6
-
     #for models
     id         = models.AutoField(primary_key=True)
     rating     = models.IntegerField(null=True)
@@ -23,6 +22,10 @@ class Rate(models.Model):
             raise ValueError("Your rate is " + str(self.rating) + "!  Add a rate for a car from 1 to 5 !")
 
 class Car(models.Model):
+    # for class
+    api_url="https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json"
+
+    # for models
     id           = models.AutoField(primary_key=True)
     make         = models.CharField(max_length=100)
     model        = models.CharField(max_length=100)
@@ -51,6 +54,20 @@ class Car(models.Model):
         for rate in self.rates.all():
             rate.delete()
         super(Car, self).delete(*args, **kwargs)
+
+    def get_JSON(self):
+        response = requests.get(self.api_url)
+        return response.json()['Results']
+
+    def save(self, *args, **kwargs):
+        data=self.get_JSON()
+        found = False
+        for car in data:
+            if car['Make_Name'] == self.make:
+                found = True
+        if found is False:
+            raise ValueError("Car doesn't exist !")
+        super(Car, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.make
