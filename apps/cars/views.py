@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import  APIView
-from .models import Car
-from .serializers import CarSerializer,CarSerializerPopular
+from .models import Car,Rate
+from .serializers import CarSerializer,CarSerializerPopular,RateSerializer
 class APIPrototypeGet(APIView):
     serializer_class=None
     queryset=None
@@ -24,7 +24,10 @@ class APIPrototype(APIView):
     def list(self):
         serializer = self.serializer_class(self.queryset, many=self.many)
         if len(self.order_by):
-            list = sorted(serializer.data, key=lambda tup: tup[self.order_by],reverse=True)
+            list = sorted(
+                serializer.data,
+                key=lambda tup: tup[self.order_by],
+                reverse=True)
         else:
             list= serializer.data
         return list
@@ -51,3 +54,7 @@ class CarListPupular (APIPrototype):
     serializer_class = CarSerializerPopular
     queryset         = Car.objects
     order_by         = 'rates_number'
+
+class AddRate(APIPrototype):
+    serializer_class = RateSerializer
+    queryset=  Rate.objects
