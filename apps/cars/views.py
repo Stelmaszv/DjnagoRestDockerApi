@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import  APIView
 from .models import Car
-from .serializers import CarSerializer
+from .serializers import CarSerializer,CarSerializerPopular
 class APIPrototypeGet(APIView):
     serializer_class=None
     queryset=None
@@ -43,7 +43,11 @@ class APIPrototype(APIView):
         return self.api_get(request)
 
 class CarList (APIPrototype):
-
     serializer_class  = CarSerializer
     queryset          = Car.objects
     order_by          = 'avg_rating'
+
+class CarListPupular (APIPrototype):
+    serializer_class = CarSerializerPopular
+    queryset         = Car.objects
+    order_by         = 'rates_number'

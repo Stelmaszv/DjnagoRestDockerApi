@@ -4,3 +4,9 @@ class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
         fields = ['id', 'make','model','avg_rating']
+
+class CarSerializerPopular(serializers.ModelSerializer):
+
+    class Meta:
+        model = Car
+        fields = ['id', 'make','model','rates_number']
