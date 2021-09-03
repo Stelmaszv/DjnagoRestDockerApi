@@ -40,13 +40,17 @@ class Car(models.Model):
             self.rates_number = self.rates.count()
 
     def set_avrage_reating(self):
-
         if self.id is not None:
             rote = 0
             for item in self.rates.all():
                 rote = rote + item.rating
             if self.rates.count() > 0:
                 self.avg_rating = rote / self.rates.count()
+
+    def delete(self, *args, **kwargs):
+        for rate in self.rates.all():
+            rate.delete()
+        super(Car, self).delete(*args, **kwargs)
 
     def __str__(self):
         return self.make
