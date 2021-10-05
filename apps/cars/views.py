@@ -53,7 +53,6 @@ class CarDelete(APIPrototypeGet):
     queryset = Car.objects
 
     def get_object(self, pk):
-
         try:
             return Car.objects.get(pk=pk)
         except Car.DoesNotExist:
