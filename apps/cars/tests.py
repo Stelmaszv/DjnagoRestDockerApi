@@ -8,7 +8,7 @@ import json
 from django.test import Client
 from .views import CarList,AddRate,CarListPupular,CarDelete
 from .serializers import CarSerializer
-
+#dqd
 class AbstratTest(APITestCase):
     many=True
 
